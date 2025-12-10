@@ -1,9 +1,25 @@
-<h1>Create / Edit Post</h1>
+{% extends 'base.html' %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+{% block title %}Post Form{% endblock %}
 
-<a href="{% url 'post_list' %}">Back</a>
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4">
+
+            <h3 class="mb-3">
+              {% if form.instance.pk %}Postni tahrirlash{% else %}Yangi post{% endif %}
+            </h3>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <button class="btn btn-main w-100 mt-3">
+                    Saqlash
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

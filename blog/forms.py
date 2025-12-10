@@ -1,7 +1,28 @@
 from django import forms
-from .models import Post, Tag
+from .models import Post
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+
+
+class RegisterForm(forms.ModelForm):
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get("password1") != cleaned.get("password2"):
+            raise forms.ValidationError("Parollar mos emas!")
+        return cleaned
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)

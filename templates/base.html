@@ -45,9 +45,9 @@
     <div class="ms-auto">
         {% if user.is_authenticated %}
             <span class="text-white me-3">Salom, {{ user.username }}</span>
-            <a class="btn btn-light btn-sm" href="/accounts/logout/">Chiqish</a>
+            <a class="btn btn-light btn-sm" href="{% url 'blogs:logout' %}">Chiqish</a>
         {% else %}
-            <a class="btn btn-light btn-sm" href="/accounts/login/">Kirish</a>
+            <a class="btn btn-light btn-sm" href="{% url 'blogs:login' %}">Kirish</a>
         {% endif %}
     </div>
 </nav>

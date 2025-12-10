@@ -7,4 +7,5 @@ urlpatterns = [
     path('create/', post_create, name='post_create'),
     path('update/<int:pk>/', post_update, name='post_update'),
     path('delete/<int:pk>/', post_delete, name='post_delete'),
+    # path('list/', PostListCreateAPIView.as_view())
 ]

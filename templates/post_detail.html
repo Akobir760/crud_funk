@@ -1,0 +1,9 @@
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+
+{% if request.user == post.author %}
+    <a href="{% url 'post_update' post.id %}">Edit</a>
+    <a href="{% url 'post_delete' post.id %}">Delete</a>
+{% endif %}
+
+<a href="{% url 'post_list' %}">Back</a>

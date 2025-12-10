@@ -1,10 +1,36 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Post, Tag
+from .models import Post
 from .forms import PostForm
 from django.core.paginator import Paginator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializer import PostSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from drf_yasg.utils import swagger_auto_schema
 
 
+
+
+# class PostListCreateAPIView(APIView):
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+
+#     @swagger_auto_schema(request_body=PostSerializer)
+#     def get(self, request):
+#         posts = Post.objects.all()
+#         serializer = PostSerializer(posts, many=True)
+#         return Response(serializer.data)
+
+#     @swagger_auto_schema(request_body=PostSerializer)
+#     def post(self, request):
+#         serializer = PostSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(author=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@login_required
 def post_list(request):
     tag_name = request.GET.get("tag")
     posts = Post.objects.all().order_by('-created_at')
@@ -16,13 +42,13 @@ def post_list(request):
     page = request.GET.get('page')
     posts = paginator.get_page(page)
 
-    return render(request, 'templates/post_list.html', {"posts": posts})
+    return render(request, 'post_list.html', {"posts": posts})
 
 
-
+@login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post, id=pk)
-    return render(request, 'templates/post_detail.html', {"post": post})
+    return render(request, 'post_detail.html', {"post": post})
 
 
 @login_required
@@ -38,7 +64,7 @@ def post_create(request):
     else:
         form = PostForm()
 
-    return render(request, 'templates/post_form.html', {"form": form})
+    return render(request, 'post_form.html', {"form": form})
 
 
 @login_required
@@ -53,7 +79,7 @@ def post_update(request, pk):
     else:
         form = PostForm(instance=post)
 
-    return render(request, 'templates/post_form.html', {"form": form})
+    return render(request, 'post_form.html', {"form": form})
 
 
 @login_required

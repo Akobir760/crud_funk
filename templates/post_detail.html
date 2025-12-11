@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block title %}{{ post.title }}{% endblock %}
@@ -12,8 +13,11 @@
         <p>{{ post.content }}</p>
     </div>
 
-    <!-- Edit / Delete buttons -->
-    <a href="{% url 'blogs:create_com'  %}" class="btn btn-main">Izoh Yozish</a>
+    <!-- Add comment link -->
+    <a href="{% url 'blogs:create_com' post_pk=post.pk %}" class="btn btn-sm btn-outline-primary">
+        Add Comment
+    </a>
+
     {% if user == post.author %}
     <div class="mt-3 d-flex gap-2">
         <a href="{% url 'blogs:post_update' post.pk %}" class="btn btn-main">Tahrirlash</a>
@@ -25,4 +29,40 @@
     </div>
     {% endif %}
 </div>
+
+<hr>
+
+<!-- ========================= -->
+<!--     COMMENT LIST          -->
+<!-- ========================= -->
+{% if post.comment_set.all %}
+    {% for comment in post.comment_set.all %}
+        <div class="card p-3 mb-2">
+
+            <p class="mb-1">
+                <strong>{{ comment.com_author.username }}</strong>
+            </p>
+
+            <p>{{ comment.com_content }}</p>
+
+            <small class="text-muted">
+                {{ comment.created_at|date:"Y-m-d H:i" }}
+            </small>
+
+            <!-- 🔥 Delete tugmasi — faqat muallifga -->
+            {% if user == comment.com_author %}
+            <form method="post" action="{% url 'blogs:del_com' comment.id %}" class="mt-2">
+                {% csrf_token %}
+                <button class="btn btn-sm btn-danger">O'chirish</button>
+            </form>
+            {% endif %}
+
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-muted">Hozircha izohlar yo‘q.</p>
+{% endif %}
+
+
 {% endblock %}
+

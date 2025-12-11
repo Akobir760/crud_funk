@@ -69,27 +69,35 @@ def tag_create(request):
 
 
 @login_required
-def comment_create(request):
-    # post = get_object_or_404(Post, id=post_pk)
+def comment_create(request, post_pk):
+    post = get_object_or_404(Post, id=post_pk)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.com_author = request.user
-            # comment.post =post
+            comment.post = post
             comment.save()
             return redirect("blogs:post_list")
     else:
         form = CommentForm()
-    
-    return render(request, 'comment_form.html', {"form":form})
+    return render(request, 'comment_form.html', {"form": form})
 
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Comment
 
 @login_required
 def comment_delete(request, pk):
-    comment = get_object_or_404(Comment, id=pk, author=request.user)
+    comment = get_object_or_404(Comment, id=pk, com_author=request.user)
+    
+    post_id = comment.post.id 
     comment.delete()
-    return redirect('blogs:post_list')
+    
+    return redirect('blogs:post_detail', post_id)
+
 
 
 @login_required

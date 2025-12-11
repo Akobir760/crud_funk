@@ -36,7 +36,7 @@ from django.contrib.auth import authenticate, login, logout
 @login_required
 def post_list(request):
     tag_name = request.GET.get("tag")
-    posts = Post.objects.all().order_by('-created_at')
+    posts = Post.objects.filter(author = request.user).order_by('-created_at')
 
     if tag_name:
         posts = posts.filter(tags__name=tag_name)

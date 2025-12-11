@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Post
-from .forms import PostForm, TagForm
+from .models import Post, Comment
+from .forms import PostForm, TagForm, CommentForm
 from django.core.paginator import Paginator
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
@@ -36,7 +36,8 @@ from django.contrib.auth import authenticate, login, logout
 @login_required
 def post_list(request):
     tag_name = request.GET.get("tag")
-    posts = Post.objects.filter(author = request.user).order_by('-created_at')
+    # posts = Post.objects.filter(author = request.user).order_by('-created_at')
+    posts = Post.objects.all().order_by('-created_at')
 
     if tag_name:
         posts = posts.filter(tags__name=tag_name)
@@ -65,6 +66,31 @@ def tag_create(request):
         form = TagForm
 
     return render(request, 'tag_form.html', {"form": form})
+
+
+@login_required
+def comment_create(request):
+    # post = get_object_or_404(Post, id=post_pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.com_author = request.user
+            # comment.post =post
+            comment.save()
+            return redirect("blogs:post_list")
+    else:
+        form = CommentForm()
+    
+    return render(request, 'comment_form.html', {"form":form})
+
+
+@login_required
+def comment_delete(request, pk):
+    comment = get_object_or_404(Comment, id=pk, author=request.user)
+    comment.delete()
+    return redirect('blogs:post_list')
+
 
 @login_required
 def post_create(request):

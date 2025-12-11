@@ -1,7 +1,14 @@
 from django import forms
-from .models import Post, Tag
+from .models import Post, Tag, Comment
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['com_author', 'com_content', 'post']
+
 
 class PostForm(forms.ModelForm):
     class Meta:

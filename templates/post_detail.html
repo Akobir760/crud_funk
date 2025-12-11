@@ -13,6 +13,7 @@
     </div>
 
     <!-- Edit / Delete buttons -->
+    <a href="{% url 'blogs:create_com'  %}" class="btn btn-main">Izoh Yozish</a>
     {% if user == post.author %}
     <div class="mt-3 d-flex gap-2">
         <a href="{% url 'blogs:post_update' post.pk %}" class="btn btn-main">Tahrirlash</a>

@@ -19,3 +19,9 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class Comment(models.Model):
+    com_author = models.ForeignKey(User, on_delete=models.CASCADE)
+    com_content = models.CharField(max_length=100)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

@@ -8,6 +8,7 @@
 
     {% if user.is_authenticated %}
     <a href="{% url 'blogs:post_create' %}" class="btn btn-main">+ Yangi Post</a>
+    <a href="{% url 'blogs:tag_create' %}" class="btn btn-main">+ Yangi Tag</a>
     {% endif %}
 </div>
 

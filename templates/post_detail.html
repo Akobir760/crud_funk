@@ -15,11 +15,11 @@
     <!-- Edit / Delete buttons -->
     {% if user == post.author %}
     <div class="mt-3 d-flex gap-2">
-        <a href="{% url 'post_update' post.pk %}" class="btn btn-main">Tahrirlash</a>
+        <a href="{% url 'blogs:post_update' post.pk %}" class="btn btn-main">Tahrirlash</a>
 
-        <form method="post" action="{% url 'post_delete' post.pk %}">
+        <form method="post" action="{% url 'blogs:post_delete' post.pk %}">
             {% csrf_token %}
-            <button class="btn btn-danger">O‘chirish</button>
+            <button class="btn btn-danger">O'chirish</button>
         </form>
     </div>
     {% endif %}

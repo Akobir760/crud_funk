@@ -63,7 +63,7 @@ def post_create(request):
             post.author = request.user
             post.save()
             form.save_m2m()
-            return redirect('post_list')
+            return redirect('blogs:post_list')
     else:
         form = PostForm()
 
@@ -78,7 +78,7 @@ def post_update(request, pk):
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('post_detail', pk=pk)
+            return redirect('blogs:post_list')
     else:
         form = PostForm(instance=post)
 
@@ -89,7 +89,7 @@ def post_update(request, pk):
 def post_delete(request, pk):
     post = get_object_or_404(Post, id=pk, author=request.user)
     post.delete()
-    return redirect('post_list')
+    return redirect('blogs:post_list')
 
 
 def register_view(request):
